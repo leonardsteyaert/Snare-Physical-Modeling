@@ -1,0 +1,23 @@
+{
+  "slug": "ChairSnare1",
+  "name": "ChairSnare",
+  "version": "2.0.0",
+  "license": "proprietary",
+  "brand": "ChairSnare",
+  "author": "",
+  "authorEmail": "",
+  "authorUrl": "",
+  "pluginUrl": "",
+  "manualUrl": "",
+  "sourceUrl": "",
+  "donateUrl": "",
+  "changelogUrl": "",
+  "modules": [
+    {
+      "slug": "ChairSnare1",
+      "name": "ChairSnare1",
+      "description": "",
+      "tags": []
+    }
+  ]
+}
