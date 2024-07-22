@@ -66,12 +66,6 @@ struct ChairSnare1 : Module {
 	WhiteNoise allpass_4_noise_theta;
 
 
-
-	
-
-	float output;
-	float feedback;
-
 	ChairSnare1() : general_delay(8820), allpass_1(6.53), allpass_2(2.2), allpass_3(2.5), allpass_4(4){
 		config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
 		configParam(TRIG_SHAPE_KNOB_PARAM, 0.f, 1.f, 0.f, "");
@@ -94,6 +88,55 @@ struct ChairSnare1 : Module {
 
 	void process(const ProcessArgs& args) override {
 
+		/*
+		
+		OBSERVATIONS:
+
+			- My LPF cuts high frequencies way more than the lop in PD, in the feedback loop
+			- My Allpass filter, diverges (feedbacks) for theta = 0.5, so you can be near but not exactly 0.5 (unlinke in  PD)
+		*/
+
+		// Get Input
+		float input_raw = inputs[D1_CV_INPUT].getVoltage();
+	    
+		// Remove DC
+		/*input_hpf_1.setCutoff_hpf(4.f, args.sampleRate);
+		input_hpf_2.setCutoff_hpf(4.f, args.sampleRate);
+		input_hpf_3.setCutoff_hpf(4.f, args.sampleRate);
+		input_hpf_4.setCutoff_hpf(4.f, args.sampleRate);
+		float input = input_hpf_4.process_hpf(input_hpf_3.process_hpf(input_hpf_2.process_hpf(input_hpf_1.process_hpf(input_raw))));
+		
+
+		// Generate feedback input
+	    float feedback_input = general_delay.read(6, args.sampleRate);
+
+		// Allpass 2 : Compute
+		float allpass_output_2 = allpass_2.process_allpass(feedback_input, 2.2f ,params[THETA4_KNOB_PARAM].getValue(), args.sampleRate);
+
+		// Allpass 3 : Compute
+		float allpass_output_3 = allpass_3.process_allpass(allpass_output_2, 2.5f ,params[THETA1_KNOB_PARAM].getValue(), args.sampleRate);
+
+		// Feedback Loop Output Processing
+		feedback_loop_lpf.setCutoff_lpf(15000.f, args.sampleRate);
+		feedback_loop_hpf.setCutoff_hpf(200.f, args.sampleRate);
+		float feedback_output = feedback_loop_hpf.process_hpf(feedback_loop_lpf.process_lpf(allpass_output_3)) * (-1.f) * 0.98f;
+
+
+		// Add Input to Feedback System
+		float output = input + feedback_output;
+
+		// Write Output to Feedback System
+		general_delay.write(output);*/
+
+		// Lowpass 20
+		feedback_loop_lpf.setCutoff_lpf(20.f, args.sampleRate);
+		float output = feedback_loop_lpf.process_lpf(input_raw);
+
+		// Generate Output
+		outputs[OUTPUT_OUTPUT].setVoltage(output);	
+
+		//------------------------------------
+/*
 		// Get Input
 		float input_raw = inputs[D1_CV_INPUT].getVoltage();
 
@@ -155,7 +198,7 @@ struct ChairSnare1 : Module {
 
 		// Generate Output
 		outputs[OUTPUT_OUTPUT].setVoltage(output);			
-
+*/
 	}
 };
 

@@ -24,10 +24,10 @@ float AllPass::process_allpass(float input, float delay_time_input,float theta_i
     setTheta_allpass(theta_input);
 
     // Calculate first COS 
-    float c = std::cos(2.f*M_PI*theta*(-0.25f));
+    float c = std::cosf(2.f*M_PI*theta*(-0.25f));
 
     // Calculate second COS
-    float d = std::cos(2.f*M_PI*theta);
+    float d = std::cosf(2.f*M_PI*theta);
 
     // Output of 1st Multiplier
     float e = a*d;

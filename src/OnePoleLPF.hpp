@@ -9,7 +9,7 @@ public:
     float process_lpf(float input);
 
 private:
-    float a0, b1;  // Filter coefficients
+    float feedback, coeff;  // Filter coefficients
     float z1;      // Filter state
 };
 
